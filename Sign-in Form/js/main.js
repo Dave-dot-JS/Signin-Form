@@ -16,14 +16,18 @@ let username;
 let password;
 
 // User information
-let users = {
-	dave: {
-		password: "BossMan"
-	},
-};
+let users = {};
 
-// Get users from local storage
-users = JSON.parse(localStorage.getItem("users"));
+// Get users from local storage if there are any
+if (JSON.parse(localStorage.getItem("users")) == null) {
+	users = {
+		dave: {
+			password: "BossMan"
+		},
+	};
+} else {
+	users = JSON.parse(localStorage.getItem("users"));
+}
 
 // Functions handling form submission
 function formValidation() {
@@ -48,7 +52,7 @@ function formValidation() {
 		// Otherwise register new user
 		} else {
 			// Check if user already exists
-			if (users[username.toLowerCase()]) {
+			if (typeof users[username.toLowerCase()] !== 'undefined') {
 				forms.forEach(form => {
 					form.classList.add('error');
 					form.addEventListener('focus', () => form.classList.remove('error'));
