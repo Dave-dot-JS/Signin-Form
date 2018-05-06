@@ -1,6 +1,8 @@
 // Default DOM elements
 const signInForm = document.getElementById('modal');
 const signInButton = document.getElementById('signin');
+const registerButton = document.getElementById('register');
+const submitRegistration = document.getElementById('sub-registration');
 const hello = document.getElementById('hello');
 
 // Sign-in form
@@ -16,15 +18,12 @@ let password;
 // User information
 let users = {
 	dave: {
-		password: "HeyYouPikachu"
+		password: "BossMan"
 	},
-    betty: {
-		password: "CharmanderIsCuter"
-	}
 };
 
-// Change data structure to remove "username' requirement but keep nested object 'Key' thingamegir
-
+// Get users from local storage
+users = JSON.parse(localStorage.getItem("users"));
 
 // Functions handling form submission
 function formValidation() {
@@ -43,7 +42,27 @@ function formValidation() {
 	if (valid[0] == true && valid[1] == true) {
 		username = forms[0].value;
 		password = forms[1].value;
-		checkUserSubmission(username);
+		// If this is a sign-in, run sign-in function 
+		if (submitButton.id === "submit") {
+			checkUserSubmission(username);
+		// Otherwise register new user
+		} else {
+			// Check if user already exists
+			if (users[username.toLowerCase()]) {
+				forms.forEach(form => {
+					form.classList.add('error');
+					form.addEventListener('focus', () => form.classList.remove('error'));
+				});
+				alert('User already exists');
+			// Otherwise create new user
+			// And save user list to Local Storage
+			} else {
+				users[username.toLowerCase()] = {password: password}
+				hello.innerHTML += `, ${username} <i class="fa fa-paw"></i>.`;
+				closeForm();
+				localStorage.setItem("users", JSON.stringify(users));
+			}
+		}
 	}
 }
 
@@ -53,9 +72,6 @@ function checkUserSubmission(user) {
 	if (password === users[user.toLowerCase()].password) {
 		closeForm();
 		hello.innerHTML += `, ${username} <i class="fa fa-paw"></i>.`;
-		setTimeout( () => {
-			window.addEventListener('click', () => location.reload());
-		} , 0);
 	} else {
 		formContainer.style.transform = 'translateX(10px)';
 		setTimeout( () => formContainer.style.transform = 'translateX(5px)', 25);
@@ -69,6 +85,7 @@ function checkUserSubmission(user) {
 
 // Functions handing form animations
 function openForm() {
+	hello.textContent = `Welcome`;	
 	signInForm.style.display = 'block';
 	setTimeout( () => signInForm.style.opacity = 1, 0);
 }
@@ -84,7 +101,18 @@ function closeForm() {
 }
 
 // Event Listeners
-signInButton.addEventListener('click', openForm);
+signInButton.addEventListener('click', () => {
+	submitButton.setAttribute('id', 'submit');
+	submitButton.textContent = 'Submit';
+	openForm()
+});
+
+registerButton.addEventListener('click', () => {
+	submitButton.setAttribute('id', 'sub-registration');
+	submitButton.textContent = 'Register';
+	openForm()
+});
+
 closeButton.addEventListener('click', closeForm);
 submitButton.addEventListener('click', formValidation);
 

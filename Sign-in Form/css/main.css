@@ -1,5 +1,5 @@
 html {
-  background: url(../img/bg.jpg) no-repeat center center fixed;
+  background: url(../img/bg2.jpg) no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -10,7 +10,7 @@ html {
 .hello {
   font: 400 8em 'Oswald';
   color: #ddd;
-  text-shadow: -0.02em -0.02em 0 #333;
+  text-shadow: 0.02em 0.02em 0 #333;
   line-height: 1;
   height: 1em;
   width: 100%;
@@ -48,6 +48,10 @@ button.signin {
 button.signin:hover {
   background-color: #c0bbbb;
   color: #666;
+}
+
+#register {
+  top: 12em;
 }
 
 .modal {
